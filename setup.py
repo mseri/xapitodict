@@ -6,6 +6,6 @@ setup(name='xapitodict',
       install_requires=["sexpdata", "xmltodict"],
       entry_points={
           'console_scripts': [
-              'xapi-to-json = xapitojson:main'
+              'xapi-to-json = xapitodict.cmd.xapitojson:main'
           ]
       })
