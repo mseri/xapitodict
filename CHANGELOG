@@ -1,0 +1,6 @@
+0.2
+- code cleanup
+- fix de-serialization of the 'last_booted_record' fields
+
+0.1
+- first release
