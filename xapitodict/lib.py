@@ -59,10 +59,34 @@ def weird_dict_to_dict(wd):
         # parse the sexped lists
         value = unsexpify(v)
 
+        # last booted record is weird and needs attention on its own...
+        if key == 'last_booted_record' and value:
+            value.remove('struct')  # remove the first field, called 'struct'
+
         # if they are non-empty lists of couples, make them dictionaries
         # this could be the wrong deserialization in rare cases
         if value and isinstance(value, list) and all(len(v) == 2 for v in value):
             value = dict(value)
+
+        # last booted record is really weird...
+        if key == 'last_booted_record' and value:
+            new = {}
+            for k in value:
+                if 'struct' in value[k]:
+                    value[k].remove('struct')
+                    new[k] = dict(value[k])
+                elif 'array' in value[k]:
+                    value[k].remove('array')
+                    new[k] = value[k]
+                elif 'boolean' in value[k]:
+                    new[k] = 'false' if value[k][1] == '0' else 'true'
+                elif 'double' in value[k]:
+                    new[k] = str(float(value[k][1]))
+                elif 'dateTime.iso8601' in value[k]:
+                    new[k] = value[k][1]
+                else:
+                    new[k] = value[k]
+            value = new
 
         # associate the parsed values to the polished keys
         res[key] = value
