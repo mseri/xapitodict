@@ -57,10 +57,13 @@ def main(argv=None):
 
     # common failures
     if not os.path.exists(args.xapi_db):
-        print("Error: unable to find the database file '{}'".format(args.xapi_db))
+        print(
+            "Error: unable to find the database file '{}'".format(args.xapi_db))
         sys.exit(1)
     if os.path.isdir(args.dest):
-        print("Error: the output file '{}' already exists and is a folder".format(args.dest))
+        print(
+            "Error: the output file '{}' already exists and is a folder".format(
+                args.dest))
         sys.exit(1)
 
     db, vsn = xapitodict.xapi_to_dict(args.xapi_db)
@@ -71,5 +74,6 @@ def main(argv=None):
         dump_dict_to_stdout(db)
     else:
         dump_dict_to_file(args.dest, db)
-        print("'{}' has been converted and saved to '{}'".format(os.path.basename(args.xapi_db),
-                                                                 os.path.basename(args.dest)))
+        print("'{}' has been converted and saved to '{}'".format(
+            os.path.basename(args.xapi_db),
+            os.path.basename(args.dest)))
