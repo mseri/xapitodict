@@ -60,34 +60,36 @@ def weird_dict_to_dict(wd):
         value = unsexpify(v)
 
         # last booted record is weird and needs attention on its own...
-        if key == 'last_booted_record' and 'struct' in value:
+        if key == 'last_booted_record' and 'struct' in value and isinstance(
+                value, list):
             value.remove('struct')  # remove the first field, called 'struct'
 
         # if they are non-empty lists of couples, make them dictionaries
         # this could be the wrong deserialization in rare cases
-        if value and isinstance(value, list) and all(len(v) == 2 for v in value):
+        if value and isinstance(value, list) and all(
+                        len(v) == 2 for v in value):
             value = dict(value)
 
         # last booted record is really weird...
         if key == 'last_booted_record' and value and isinstance(value, dict):
             new = {}
-            for k, v in value.items():
-                if 'struct' in v:
-                    v.remove('struct')
-                    new[k] = dict(v)
-                elif 'array' in v:
-                    v.remove('array')
-                    new[k] = v
-                elif 'boolean' in v:
-                    new[k] = 'false' if v[1] == '0' else 'true'
-                elif 'double' in v:
-                    new[k] = str(float(v[1]))
-                elif 'dateTime.iso8601' in v:
-                    new[k] = v[1]
-                elif k == 'last_booted_record':
-                    new[k] = {}
+            for lk, lv in value.items():
+                if 'struct' in lv:
+                    lv.remove('struct')
+                    new[lk] = dict(lv)
+                elif 'array' in lv:
+                    lv.remove('array')
+                    new[lk] = lv
+                elif 'boolean' in lv:
+                    new[lk] = 'false' if lv[1] == '0' else 'true'
+                elif 'double' in lv:
+                    new[lk] = str(float(lv[1]))
+                elif 'dateTime.iso8601' in lv:
+                    new[lk] = lv[1]
+                elif lk == 'last_booted_record':
+                    new[lk] = {}
                 else:
-                    new[k] = v
+                    new[lk] = lv
             value = new
 
         if key == 'last_booted_record' and not value:
