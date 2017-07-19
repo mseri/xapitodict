@@ -1,7 +1,7 @@
 from setuptools import setup
 
 setup(name='xapitodict',
-      version='0.2',
+      version='0.3',
       packages=['xapitodict', 'xapitodict.cmd'],
       install_requires=["sexpdata", "xmltodict"],
       entry_points={

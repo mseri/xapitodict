@@ -1,3 +1,6 @@
+0.3
+- do not crash if the last_booted_record is not sexp but xml [it can happen :(]
+
 0.2
 - code cleanup
 - fix de-serialization of the 'last_booted_record' fields
