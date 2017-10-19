@@ -43,8 +43,10 @@ def parse_args_or_exit(argv=None):
              "in the '_version' key")
     parser.add_argument("xapi_db", metavar="XAPIDB",
                         help="Path to the xml dump of the xapi database")
-    parser.add_argument("dest", metavar="DEST",
-                        help="Path to the output json file (use - for stdout)")
+    parser.add_argument("-o", "--output", metavar="DEST",
+                        dest="dest", default=None,
+                        help="Path to the output json file. "
+                             "Print to stdout when missing")
     return parser.parse_args(argv)
 
 
@@ -57,23 +59,21 @@ def main(argv=None):
 
     # common failures
     if not os.path.exists(args.xapi_db):
-        print(
-            "Error: unable to find the database file '{}'".format(args.xapi_db))
-        sys.exit(1)
-    if os.path.isdir(args.dest):
-        print(
-            "Error: the output file '{}' already exists and is a folder".format(
-                args.dest))
-        sys.exit(1)
+        sys.exit("Error: unable to find the database file '{}'".
+                 format(args.xapi_db))
+
+    if args.dest is not None and os.path.isdir(args.dest):
+        sys.exit("Error: the output file '{}' already exists and is a folder".
+                 format(args.dest))
 
     db, vsn = xapitodict.xapi_to_dict(args.xapi_db)
     if args.print_db:
         db["_version"] = vsn
 
-    if args.dest == "-":
-        dump_dict_to_stdout(db)
-    else:
+    if args.dest is not None:
         dump_dict_to_file(args.dest, db)
         print("'{}' has been converted and saved to '{}'".format(
             os.path.basename(args.xapi_db),
-            os.path.basename(args.dest)))
+            os.path.basename(args.dest)), file=sys.stderr)
+    else:
+        dump_dict_to_stdout(db)

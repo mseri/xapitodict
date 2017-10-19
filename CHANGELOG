@@ -1,3 +1,6 @@
+0.4
+- change xapi-to-json cli interface: default print to stdout, print to file with -o flag
+
 0.3
 - do not crash if the last_booted_record is not sexp but xml [it can happen :(]
 
