@@ -3,6 +3,7 @@ Library to convert a xapi db xml dump to a python dictionary
 """
 from __future__ import print_function, division
 
+import re
 import sexpdata
 import xmltodict
 
@@ -33,6 +34,10 @@ def unsexpify(v):
         # the sexp parser interprets `'` for quasiquoting,
         # so we need to replace them
         val = v.replace("'", '"')
+        # also replace serialised single spaces (since recent xapi)
+        # literally match %. only if not following a %. This is not
+        # exactly right but should cover most cases.
+        val = re.sub(r'(?<!%)%\.', " ", val)
         return sexpdata.loads(val)
     else:
         # it's a simple string, remove unnecessary `'`
