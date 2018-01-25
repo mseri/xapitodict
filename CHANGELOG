@@ -1,3 +1,8 @@
+0.5
+- lib: fixup in unsexpification
+- lib: correctly parse tables with one row
+- lib: correctly strip %% from recent xapi databases
+
 0.4
 - change xapi-to-json cli interface: default print to stdout, print to file with -o flag
 
