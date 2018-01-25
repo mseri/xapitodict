@@ -33,10 +33,10 @@ def parse_args_or_exit(argv=None):
     Parse command line options
     """
     parser = argparse.ArgumentParser(
-        description='CLI util to dump an xml blob of the xapi database to json')
+        description='CLI util to dump an xml dump of the xapi db to json')
     parser.add_argument('--version', action='version',
                         version="%%(prog)s %s" %
-                                pkg_resources.require("xapitodict")[0].version)
+                        pkg_resources.require("xapitodict")[0].version)
     parser.add_argument(
         "-v", "--print-db-version", dest="print_db", action='store_true',
         help="Include the version metadata of the extracted xapi db "
@@ -66,6 +66,7 @@ def main(argv=None):
         sys.exit("Error: the output file '{}' already exists and is a folder".
                  format(args.dest))
 
+    # pylint: disable=invalid-name
     db, vsn = xapitodict.xapi_to_dict(args.xapi_db)
     if args.print_db:
         db["_version"] = vsn
