@@ -79,7 +79,7 @@ def weird_dict_to_dict(wd):
         if key == 'last_booted_record' and value and isinstance(value, dict):
             new = {}
             for lk, lv in value.items():
-                if 'struct' in lv:
+                if 'struct' in lv and not isinstance(lv, str):
                     lv.remove('struct')
                     new[lk] = dict(lv)
                 elif 'array' in lv:
@@ -123,14 +123,19 @@ def polish_raw_blob(obj):
         # heuristic parsing of the values imported
         # by `xmltodict` for a xapi database
         name = kind['@name']
+        raw_content = kind.get('row', [])
+        if len(raw_content) > 0:
+            # if the content is parseable by weird_dict_to_dict
+            # and not in a list, adapt it first
+            if isinstance(raw_content, dict):
+                raw_content = [raw_content]
 
-        if len(kind.get('row', [{}])) > 0:
-            if not isinstance(kind.get('row', [{}]), list):
+            if not isinstance(raw_content, list):
                 # some rows are serialized in a weird way,
                 # this is a hack to make the uniform
-                content = [kind.get('row', [{}])]
+                content = [raw_content]
             else:
-                content = list(map(weird_dict_to_dict, kind.get('row', [])))
+                content = list(map(weird_dict_to_dict, raw_content))
 
             # add to the xapi table the database rows:
             # a list of dictionaries
