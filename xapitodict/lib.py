@@ -39,10 +39,11 @@ def unsexpify(v):
         # exactly right but should cover most cases.
         val = re.sub(r'(?<!%)%\.', " ", val)
         return sexpdata.loads(val)
-    else:
-        # it's a simple string, remove unnecessary `'`
-        return v.strip("'")
 
+    # it's a simple string, remove unnecessary `'`
+    val = v.strip("'")
+    # TODO: also replace %n -> \n
+    return re.sub(r'(?<!%)%\.', " ", val)
 
 def weird_dict_to_dict(wd):
     """
