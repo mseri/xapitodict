@@ -79,7 +79,7 @@ def weird_dict_to_dict(wd):
         if key == 'last_booted_record' and value and isinstance(value, dict):
             new = {}
             for lk, lv in value.items():
-                if 'struct' in lv:
+                if 'struct' in lv and not isinstance(lv, str):
                     lv.remove('struct')
                     new[lk] = dict(lv)
                 elif 'array' in lv:
