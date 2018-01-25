@@ -18,6 +18,7 @@ def load_xml_into_raw_dict(filename):
         return dump['database']
 
 
+# pylint: disable=invalid-name
 def unsexpify(v):
     """
     This is an helper meant to unsexpify some fields
@@ -45,6 +46,8 @@ def unsexpify(v):
     # TODO: also replace %n -> \n
     return re.sub(r'(?<!%)%\.', " ", val)
 
+
+# pylint: disable=too-many-branches, invalid-name
 def weird_dict_to_dict(wd):
     """
     Helper used to get rid of some internal fields,
@@ -53,6 +56,7 @@ def weird_dict_to_dict(wd):
     S-expressions.
     """
     res = {}
+    # pylint: disable=invalid-name
     for k, v in wd.items():
         # ignore the internal fields (`_created`, ...)
         if k.startswith("@_"):
@@ -72,13 +76,15 @@ def weird_dict_to_dict(wd):
 
         # if they are non-empty lists of couples, make them dictionaries
         # this could be the wrong deserialization in rare cases
-        if value and isinstance(value, list) and all(
-                        len(v) == 2 for v in value):
+        if value \
+           and isinstance(value, list) \
+           and all(len(v) == 2 for v in value):
             value = dict(value)
 
         # last booted record is really weird...
         if key == 'last_booted_record' and value and isinstance(value, dict):
             new = {}
+            # pylint: disable=invalid-name
             for lk, lv in value.items():
                 if 'struct' in lv and not isinstance(lv, str):
                     lv.remove('struct')
@@ -125,7 +131,7 @@ def polish_raw_blob(obj):
         # by `xmltodict` for a xapi database
         name = kind['@name']
         raw_content = kind.get('row', [])
-        if len(raw_content) > 0:
+        if raw_content:
             # if the content is parseable by weird_dict_to_dict
             # and not in a list, adapt it first
             if isinstance(raw_content, dict):
@@ -156,12 +162,16 @@ def polish_raw_blob(obj):
     version = {}
 
     for row in obj['manifest']['pair']:
-        def if_key_add_it(val):
+        def if_key_add_it(row, val):
+            "Helper for manifest generation"
             if row["@key"] == val:
                 version[val] = row["@value"]
 
-        for key in ['schema_major_vsn', 'schema_minor_vsn', 'generation_count']:
-            if_key_add_it(key)
+        for key in [
+                'schema_major_vsn',
+                'schema_minor_vsn',
+                'generation_count']:
+            if_key_add_it(row, key)
 
     return xapi_db, version
 
