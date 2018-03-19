@@ -18,6 +18,36 @@ def load_xml_into_raw_dict(filename):
         return dump['database']
 
 
+def unprotect(s):
+    """
+    Do more or less what
+    https://github.com/xapi-project/xen-api/blob/master/ocaml/database/xml_spaces.ml#L89
+    does
+    """
+    if len(s) < 2:
+        return s
+    buffer = ""
+    mapper = {
+        "_": "  ",
+        ".": " ",
+        "t": "\t",
+        "n": "\n",
+        "r": "\r",
+        "%": "%"
+    }
+    it = zip(s, s[1:] + " ")
+    for (l,r) in it:
+        if l == "%" and r in mapper:
+            buffer += mapper[r]
+            try:
+                next(it)
+            except StopIteration:
+                return buffer
+        else:
+            buffer += l
+    return buffer
+
+
 # pylint: disable=invalid-name
 def unsexpify(v):
     """
@@ -35,16 +65,13 @@ def unsexpify(v):
         # the sexp parser interprets `'` for quasiquoting,
         # so we need to replace them
         val = v.replace("'", '"')
-        # also replace serialised single spaces (since recent xapi)
-        # literally match %. only if not following a %. This is not
-        # exactly right but should cover most cases.
-        val = re.sub(r'(?<!%)%\.', " ", val)
+        # Let's unprotect spaces and other characters
+        val = unprotect(val)
         return sexpdata.loads(val)
 
     # it's a simple string, remove unnecessary `'`
     val = v.strip("'")
-    # TODO: also replace %n -> \n
-    return re.sub(r'(?<!%)%\.', " ", val)
+    return unprotect(val)
 
 
 # pylint: disable=too-many-branches, invalid-name
