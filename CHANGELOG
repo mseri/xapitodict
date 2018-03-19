@@ -1,3 +1,6 @@
+0.5.2
+- use the same logic as the xapi database to deal with the % in the strings
+
 0.5.1
 - lib: strip %. from strings as well
 - minor code cleanup
