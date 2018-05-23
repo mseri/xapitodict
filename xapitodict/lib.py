@@ -36,6 +36,8 @@ def unprotect(s):
         "%": "%"
     }
     it = zip(s, s[1:] + " ")
+    if isinstance(it, list):
+        it = iter(it)
     for (l,r) in it:
         if l == "%" and r in mapper:
             buffer += mapper[r]
