@@ -128,7 +128,7 @@ def weird_dict_to_dict(wd):
                 elif lk == 'last_booted_record':
                     new[lk] = {}
                 else:
-                    new[lk] = lv
+                    new[lk] = unprotect(lv)
             value = new
 
         if key == 'last_booted_record' and not value:
