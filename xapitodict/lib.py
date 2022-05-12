@@ -69,7 +69,11 @@ def unsexpify(v):
         val = v.replace("'", '"')
         # Let's unprotect spaces and other characters
         val = unprotect(val)
-        return sexpdata.loads(val)
+        try:
+            return sexpdata.loads(val)
+        except AssertionError:
+            # If it doesn't load as a sexp it probably isn't one.
+            pass
 
     # it's a simple string, remove unnecessary `'`
     val = v.strip("'")
