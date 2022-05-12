@@ -1,3 +1,6 @@
+0.5.5
+- be more lenient with unsexpify if it fails (MarkSymsCtx #5).
+
 0.5.4
 - fix unprotect for python2.7
 
