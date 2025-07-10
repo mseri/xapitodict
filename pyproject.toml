@@ -1,0 +1,23 @@
+[project]
+name = "xapitodict"
+authors = [{name = "Marcello Seri"}]
+maintainers = [{name = "Pau Ruiz Safont", email = "pau.safont+pypi@vates.tech"}]
+readme = "README.md"
+license = "LGPL-2.1-only"
+license-files = ["LICENSE"]
+dependencies = ["sexpdata", "xmltodict"]
+dynamic = ["version"]
+
+[project.scripts]
+"xapi-to-json" = "xapitodict.cmd.xapitojson:main"
+
+[project.urls]
+Homepage = "https://github.com/mseri/xapitodict"
+Repository = "https://github.com/mseri/xapitodict"
+Changelog = "https://github.com/mseri/xapitodict/blob/master/CHANGELOG"
+
+[build-system]
+requires = ["setuptools >= 77.0.3", "setuptools-scm>=8"]
+build-backend = "setuptools.build_meta"
+
+[tool.setuptools_scm]

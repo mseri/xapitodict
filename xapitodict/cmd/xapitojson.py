@@ -8,10 +8,15 @@ import json
 import os
 import sys
 
-import pkg_resources
+from importlib.metadata import version, PackageNotFoundError
 
 import xapitodict
 
+try:
+    __version__ = version("xapitodict")
+except PackageNotFoundError:
+    # package is not installed
+    pass
 
 def dump_dict_to_file(filename, db_dict):
     """
@@ -35,8 +40,7 @@ def parse_args_or_exit(argv=None):
     parser = argparse.ArgumentParser(
         description='CLI util to dump an xml dump of the xapi db to json')
     parser.add_argument('--version', action='version',
-                        version="%%(prog)s %s" %
-                        pkg_resources.require("xapitodict")[0].version)
+                        version="%%(prog)s %s" % __version__)
     parser.add_argument(
         "-v", "--print-db-version", dest="print_db", action='store_true',
         help="Include the version metadata of the extracted xapi db "
