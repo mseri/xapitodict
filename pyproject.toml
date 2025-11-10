@@ -5,11 +5,12 @@ maintainers = [{name = "Pau Ruiz Safont", email = "pau.safont+pypi@vates.tech"}]
 readme = "README.md"
 license = "LGPL-2.1-only"
 license-files = ["LICENSE"]
-dependencies = ["sexpdata", "xmltodict"]
+dependencies = ["sexpdata", "xmltodict", "sqlite-utils"]
 dynamic = ["version"]
 
 [project.scripts]
 "xapi-to-json" = "xapitodict.cmd.xapitojson:main"
+"xapi-to-sql" = "xapitodict.cmd.xapitosql:main"
 
 [project.urls]
 Homepage = "https://github.com/mseri/xapitodict"
