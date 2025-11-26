@@ -31,7 +31,7 @@ available on `pypi` and installable via `pip` or `easy_install`.
 
 Run either of:
 
-- `python setup.py install` (or `python setup.py install --user` if you
+- `python -m pip install` (or `python -m pip install --user` if you
   prefer a local install)
 
 - `pip install .` (or `pip install --user .` if you prefer a local install)
